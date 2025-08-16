@@ -10,7 +10,9 @@ class Contato {
         return this._nome;
     }
     set nome(valor) {
-        if (!valor || valor.trim().length === 0) throw new Error('Nome não pode ser vazio');
+        if (!valor || valor.trim().length === 0) throw new Error('O nome do contato não pode estar vazio.');
+        if (!/^[A-Za-zÀ-ú]+(?: [A-Za-zÀ-ú]+)*$/.test(valor)) throw new Error('O nome do contato é inválido! Deve incluir apenas letras (com ou sem acentos) e espaços.');
+
         this._nome = valor.trim();
     }
 
@@ -18,7 +20,8 @@ class Contato {
         return this._email;
     }
     set email(valor) {
-        if (!valor || !valor.includes('@')) throw new Error('E-mail deve conter "@"');
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(valor)) throw new Error('O e-mail informado é inválido!');
+
         this._email = valor.trim();
     }
 
@@ -26,7 +29,8 @@ class Contato {
         return this._telefone;
     }
     set telefone(valor) {
-        if (!valor || !/^\d{8,}$/.test(valor)) throw new Error('Telefone deve conter ao menos 8 dígitos');
+        if (!/^(\+55\s?)?(\(?\d{2}\)?\s?)?(\d{4,5}-?\d{4})$/.test(valor)) throw new Error('O número de telefone do contato não segue um padrão válido!');
+
         this._telefone = valor.trim();
     }
 }

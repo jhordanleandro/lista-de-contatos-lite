@@ -19,10 +19,17 @@ function render(contatos) {
     tbody.innerHTML = '';
     contatos.forEach((contato, idx) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${contato.nome}</td>
-            <td>${contato.email}</td>
-            <td>${contato.telefone}</td>
+        const values = [ contato.nome, contato.email, contato.telefone ];
+
+        // Previnir vulnerabilidade de XSS utilizando o "textContent" ao invés de "innerHTML"
+        values.forEach((value) => {
+            const td = document.createElement('td');
+
+            td.textContent = value;
+            tr.appendChild(td);
+        });
+
+        tr.innerHTML += `
             <td>
                 <button class="edit-btn" onclick="editarContato(${idx})">Editar</button>
                 <button class="remove-btn" onclick="removerContato(${idx})">Excluir</button>
@@ -38,6 +45,7 @@ function handleSubmit(e) {
     const nome = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const telefone = document.getElementById('phone').value.trim();
+
     try {
         if (editandoIdx !== null) {
             const novoContato = new Contato(nome, email, telefone);
